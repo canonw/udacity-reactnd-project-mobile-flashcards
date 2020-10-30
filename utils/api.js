@@ -7,8 +7,8 @@ import {
 } from "./_decks";
 
 export async function fetchDecks() {
-  // Clear all items for development purpose.
-  //await AsyncStorage.clear();
+  // Clear items for development purpose.
+  //await AsyncStorage.removeItem(FLASHCARD_STORAGE_KEY);
 
   const item = await AsyncStorage.getItem(FLASHCARD_STORAGE_KEY);
 

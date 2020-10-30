@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import { Button, Divider, Icon, ListItem, Text } from "react-native-elements";
 
 import { styles } from "../utils/styles";
+import { clearLocalNotification, setLocalNotification } from "../utils/helpers";
 
 const renderQuizPage = (
   deck,
@@ -189,12 +190,20 @@ function QuizScreen({ navigation, route, decks }) {
     setQuizParameter(newParam);
   };
 
+  const resetNotification = () => {
+    clearLocalNotification().then(setLocalNotification);
+  };
+
   const handleReplayQuiz = () => {
+    resetNotification();
+
     const quizParameter = initQuizParameter(deck);
     setQuizParameter(quizParameter);
   };
 
   const handleQuitQuiz = () => {
+    resetNotification();
+
     navigation.navigate("Deck", {
       deckId,
     });

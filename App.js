@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import { NavigationContainer } from "@react-navigation/native";
@@ -7,6 +7,8 @@ import { colors, ThemeContext, ThemeProvider } from "react-native-elements";
 import { createStackNavigator } from "@react-navigation/stack";
 import reducer from "./reducers";
 import middleware from "./middleware";
+import { setLocalNotification } from "./utils/helpers";
+
 import DeckListScreen from "./components/DeckListScreen";
 import DeckScreen from "./components/DeckScreen";
 import NewCardScreen from "./components/NewCardScreen";
@@ -28,6 +30,10 @@ const AppTheme = {
 
 export default function App() {
   const { theme } = useContext(ThemeContext);
+
+  useEffect(() => {
+    setLocalNotification();
+  }, []);
 
   return (
     <Provider store={store}>
