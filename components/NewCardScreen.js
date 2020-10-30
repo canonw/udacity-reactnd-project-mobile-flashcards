@@ -21,7 +21,11 @@ function NewCardScreen({ dispatch, navigation, route, decks }) {
 
   const onSubmit = (deckId) => {
     dispatch(handleAddCard(deckId, { question, answer }));
-    navigation.goBack();
+
+    //navigation.goBack();
+    navigation.navigate("Deck", {
+      deckId,
+    });
   };
 
   return (

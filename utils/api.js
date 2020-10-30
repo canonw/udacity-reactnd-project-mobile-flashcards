@@ -23,8 +23,7 @@ export async function fetchDecks() {
   }
 }
 
-export async function saveDeckInStorage(title) {
-  const deck = _createDeck(title);
+export async function saveDeckInStorage(deck) {
   await AsyncStorage.mergeItem(
     FLASHCARD_STORAGE_KEY,
     JSON.stringify({ [deck.id]: deck })

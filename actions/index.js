@@ -23,9 +23,9 @@ export function saveDeckInRedux(deck) {
   };
 }
 
-export const handleNewDeck = (title) => {
+export const handleNewDeck = (deck) => {
   return (dispatch) => {
-    saveDeckInStorage(title).then((deck) => {
+    saveDeckInStorage(deck).then((deck) => {
       dispatch(saveDeckInRedux(deck));
       return deck;
     });

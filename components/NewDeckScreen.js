@@ -9,16 +9,20 @@ import {
 import { connect } from "react-redux";
 import { Button, Input } from "react-native-elements";
 
-import { handleNewDeck } from "../actions";
 import { styles } from "../utils/styles";
+import { _createDeck } from "../utils/_decks";
+import { handleNewDeck } from "../actions";
 
 function NewDeckScreen({ dispatch, navigation }) {
   const [title, setTitle] = useState("");
 
   const onSubmit = () => {
-    dispatch(handleNewDeck({ title }));
+    const deck = _createDeck({ title });
+    dispatch(handleNewDeck(deck));
 
-    navigation.goBack();
+    navigation.navigate("Deck", {
+      deckId: deck.id,
+    });
   };
 
   return (
