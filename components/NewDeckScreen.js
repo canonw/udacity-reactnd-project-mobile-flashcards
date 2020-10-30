@@ -1,73 +1,57 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-  Button,
+  Keyboard,
   KeyboardAvoidingView,
   SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  StatusBar,
-  TouchableOpacity,
-  Text,
-  TextInput,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { connect } from "react-redux";
-import { useTheme } from "@react-navigation/native";
+import { Button, Input } from "react-native-elements";
 
-function NewDeckScreen({ dispatch, navigation, route }) {
-  const { deck } = route.params;
-  const { colors } = useTheme();
+import { handleNewDeck } from "../actions";
+import { styles } from "../utils/styles";
 
-  const [name, setName] = useState("");
+function NewDeckScreen({ dispatch, navigation }) {
+  const [title, setTitle] = useState("");
 
-  const onAddDeck = () => {
-    // TODO: Add Deck
+  const onSubmit = () => {
+    dispatch(handleNewDeck({ title }));
+
+    navigation.goBack();
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.card }]}>
-      <ScrollView keyboardShouldPersistTaps="handled">
-        <KeyboardAvoidingView enabled>
-          <View style={[styles.container, { backgroundColor: colors.card }]}>
-            <TextInput
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView enabled>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View>
+            <Input
               autoFocus={true}
-              style={[styles.title, { color: colors.text }]}
-              placeholder="Enter Deck Name"
-              value={name}
-              onChangeText={(text) => setName(text)}
+              placeholder="Enter Deck Title"
+              leftIcon={{ type: "font-awesome", name: "folder" }}
+              value={title}
+              onChangeText={(value) => setTitle(value)}
             />
-            <Button title="Add Deck" onPress={() => onAddDeck()} />
+            <View style={styles.buttonContainer}>
+              <Button
+                title="Submit"
+                style={styles.button}
+                disabled={!title}
+                onPress={() => onSubmit()}
+              />
+            </View>
           </View>
-        </KeyboardAvoidingView>
-      </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  titleStyle: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 10,
-  },
-  textInputStyle: {
-    flexDirection: "row",
-    height: 40,
-    marginTop: 20,
-    marginLeft: 35,
-    marginRight: 35,
-    margin: 10,
-  },
-});
+function mapStateToProps(decks) {
+  return {
+    decks,
+  };
+}
 
-// function mapStateToProps(decks) {
-//   return {
-//     decks,
-//   };
-// }
-
-// export default connect(mapStateToProps)(NewDeckScreen);
-export default NewDeckScreen;
+export default connect(mapStateToProps)(NewDeckScreen);

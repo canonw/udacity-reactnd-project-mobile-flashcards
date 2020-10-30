@@ -1,4 +1,9 @@
-import { RECEIVE_DECKS } from "../actions/index";
+import {
+  RECEIVE_DECKS,
+  ADD_DECK,
+  DELETE_DECK,
+  ADD_CARD_TO_DECK,
+} from "../actions/index";
 
 function decks(state = {}, action) {
   switch (action.type) {
@@ -7,11 +12,27 @@ function decks(state = {}, action) {
         ...state,
         ...action.decks,
       };
-    // case ADD_DECK:
-    //   return {
-    //     ...state,
-    //     ...action.deck,
-    //   };
+    case ADD_DECK:
+      return {
+        ...state,
+        [action.deck.id]: action.deck,
+      };
+    case DELETE_DECK:
+      delete state[action.deckId];
+      return {
+        ...state,
+      };
+    case ADD_CARD_TO_DECK:
+      return {
+        ...state,
+        [action.deckId]: {
+          ...state[action.deckId],
+          cards: {
+            ...state[action.deckId].cards,
+            [action.card.id]: action.card,
+          },
+        },
+      };
     default:
       return state;
   }

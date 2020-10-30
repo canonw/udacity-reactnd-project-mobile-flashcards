@@ -1,84 +1,78 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-  Button,
+  Keyboard,
   KeyboardAvoidingView,
   SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  StatusBar,
-  TouchableOpacity,
-  Text,
-  TextInput,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { connect } from "react-redux";
-import { useTheme } from "@react-navigation/native";
+import { Button, Icon, Input, ListItem } from "react-native-elements";
 
-function NewCardScreen({ dispatch, navigation, route }) {
-  const { deck } = route.params;
-  const { colors } = useTheme();
+import { styles } from "../utils/styles";
+import { handleAddCard } from "../actions";
+
+function NewCardScreen({ dispatch, navigation, route, decks }) {
+  const { deckId } = route.params;
+  const deck = decks ? decks[deckId] : null;
 
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
 
-  const onAddCard = (deckId) => {
-    // TODO: Add Card
+  const onSubmit = (deckId) => {
+    dispatch(handleAddCard(deckId, { question, answer }));
+    navigation.goBack();
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: colors.card }]}>
-      <ScrollView keyboardShouldPersistTaps="handled">
-        <View>
-          <Text style={{ color: colors.text }}>{deck.id}</Text>
-          <Text style={{ color: colors.text }}>{deck.title}</Text>
-        </View>
-        <KeyboardAvoidingView enabled>
-          <View style={[styles.container, { backgroundColor: colors.card }]}>
-            <TextInput
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView enabled>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View>
+            <ListItem bottomDivider>
+              <Icon name="folder" type="font-awesome" />
+              <ListItem.Content>
+                <ListItem.Title>{deck ? deck.title : ""}</ListItem.Title>
+                <ListItem.Subtitle>Create a new card to deck</ListItem.Subtitle>
+              </ListItem.Content>
+            </ListItem>
+            <Input
               autoFocus={true}
-              style={[styles.title, { color: colors.text }]}
-              placeholder="Enter Question"
+              placeholder="Enter Card Question"
+              leftIcon={{ type: "font-awesome", name: "question-circle" }}
               value={question}
-              onChangeText={(text) => setQuestion(text)}
+              onChangeText={(value) => setQuestion(value)}
             />
-            <TextInput
-              style={{ color: colors.text }}
-              placeholder="Enter Answer"
+            <Input
+              placeholder="Enter Card Answer"
+              leftIcon={{ type: "font-awesome", name: "info-circle" }}
               value={answer}
-              onChangeText={(text) => setAnswer(text)}
+              onChangeText={(value) => setAnswer(value)}
             />
-            <Button title="Add Card" onPress={() => onAddCard(deck.Id)} />
+            <View style={styles.buttonContainer}>
+              <Button
+                title="Submit"
+                style={styles.button}
+                disabled={
+                  !(
+                    question &&
+                    question.trim().length > 0 &&
+                    answer &&
+                    answer.trim().length > 0
+                  )
+                }
+                onPress={() => onSubmit(deck.id)}
+              />
+            </View>
           </View>
-        </KeyboardAvoidingView>
-      </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  titleStyle: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 10,
-  },
-  textInputStyle: {
-    flexDirection: "row",
-    height: 40,
-    marginTop: 20,
-    marginLeft: 35,
-    marginRight: 35,
-    margin: 10,
-  },
-});
+const mapStateToProps = (decks) => {
+  return { decks };
+};
 
-// function mapStateToProps(decks) {
-//   return {
-//     decks,
-//   };
-// }
-
-// export default connect(mapStateToProps)(NewCardScreen);
-export default NewCardScreen;
+export default connect(mapStateToProps)(NewCardScreen);

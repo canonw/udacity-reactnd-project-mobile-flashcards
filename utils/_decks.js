@@ -1,12 +1,10 @@
-import AsyncStorage from "@react-native-community/async-storage";
-
 export const FLASHCARD_STORAGE_KEY = "MOBILE_FLASHCARDS:STORAGE_KEY";
 
-let seedDeckData = {
+const seedDeckData = {
   "4a01204bf7e00e21a32b8184": {
     id: "4a01204bf7e00e21a32b8184",
     title: "Adding Number",
-    questions: {
+    cards: {
       "036e4c0c4221f6a3882100a0": {
         id: "036e4c0c4221f6a3882100a0",
         question: "1+1",
@@ -22,7 +20,7 @@ let seedDeckData = {
   "98832771be1757e8fa82a1ef": {
     id: "98832771be1757e8fa82a1ef",
     title: "Subtracting Number",
-    questions: {
+    cards: {
       "7154d6aa975f6812198403d4": {
         id: "7154d6aa975f6812198403d4",
         question: "7-1",
@@ -44,6 +42,24 @@ function generateUID() {
   );
 }
 
-export function formatDecks(results) {
-  return results === null ? JSON.parse(JSON.stringify(seedDeckData)) : results;
+export function _createSeedData() {
+  return { ...seedDeckData };
 }
+
+export const _createDeck = ({ title }) => {
+  const id = generateUID();
+  const deck = {
+    id: id,
+    title: title,
+    cards: {},
+  };
+  return deck;
+};
+
+export const _createCard = (card) => {
+  const result = {
+    id: generateUID(),
+    ...card,
+  };
+  return result;
+};
