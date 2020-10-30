@@ -20,15 +20,14 @@ After command executes the application, a web browser instant should open the la
 
 ## Testing
 
-Program code has been developed against the OS platform.
+Program code has been developed against these OS platform.
 
 | OS      | Tested |
 | ------- | ------ |
 | Web     | Yes    |
 | Android | Yes    |
-| iOS     | No     |
 
-## UI
+## User Interface
 
 Here's screenshot created by this project.
 
